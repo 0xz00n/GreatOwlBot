@@ -3,6 +3,12 @@
 import re
 import discord
 import requests
+from module.welcome import Welcome
+from module.help import HelpMenus
+from module.sites import Sites
+from module.shortener import Shortener
+from module.ships import ShipCard
+from module.roles import Roles
 
 tokenfile = open('token','r')
 TOKEN = tokenfile.readline().rstrip()
@@ -19,206 +25,51 @@ async def on_message(message):
 
     #Help response
     if message.content.startswith('!help'):
-        em = discord.Embed(
-            title='Great Owl Help',
-            description="""Help Commands:
-                        !help: Displays this help message
-                        !rolehelp: Role command help
-                        !shiphelp: Ship information help\n
-                        Website Link Commands:
-                        !coriolis: Coriolis website
-                        !eddb: Elite Dangerous Database website
-                        !edrefcard: EDRefCard website
-                        !edsm: Elite Dangerous Star Map website
-                        !inara: INARA website\n
-                        Other Commands:
-                        !vopals: Our stance on core mining
-                        !materials: Spreadsheet for engineering materials and their locations""",
-            color=0xff7700
-        )
-        em.set_image(
-            url='https://i.imgur.com/7yG4taS.jpg'
-        )
-        await client.send_message(message.channel, embed=em)
+        HelpMenus.genHelp()
 
     #Coriolis response
     if message.content.startswith('!coriolis'):
-        em = discord.Embed(
-            title='Coriolis EDCD Edition',
-            url='https://coriolis.io',
-            description='A ship builder, outfitting and comparison tool for Elite Dangerous',
-            color=0xff7700
-        )
-        em.add_field(
-            name='Note', value='***Please use the s.orbis built-in short link when sharing builds! [Link icon on top right of coriolis page]***'
-        )
-        em.set_image(
-            url='https://coriolis.io/mstile-144x144.png'
-        )
-        await client.send_message(message.channel, embed=em)
+        Sites.coriolis()
 
     #Fuel Rats response
     if message.content.startswith('!fuelrats'):
-        em = discord.Embed(
-            title='The Fuel Rats',
-            url='https://fuelrats.com',
-            description='The Fuel Rats are Elite: Dangerous\'s premier emergency refueling service. Fueling the galaxy, one ship at a time, since 3301.',
-            color=0xff7700
-        )
-        em.set_image(
-            url='https://i.imgur.com/XHCgDTo.png'
-        )
-        await client.send_message(message.channel, embed=em)
+        Sites.fuelRats()
 
     #INARA response
     if message.content.startswith('!inara'):
-        em = discord.Embed(
-            title='INARA - Elite:Dangerous companion',
-            url='https://inara.cz',
-            description='The companion site for Elite:Dangerous. Market data, CMDR\'s logs, logbooks, wings, galleries, powerplay, engineers, crafting, galaxy info, news and more...',
-            color=0xff7700
-        )
-        em.set_image(
-            url='https://inara.cz/mstile-144x144.png'
-        )
-        await client.send_message(message.channel, embed=em)
+        Sites.inara()
 
     #EDDB response
     if message.content.startswith('!eddb'):
-        em = discord.Embed(
-            title='Elite: Dangerous Database - EDDB',
-            url='https://eddb.io',
-            description='A site about systems, bodies, stations, commodities, materials and trade routes in Elite: Dangerous.',
-            color=0xff7700
-        )
-        em.set_image(
-            url='https://eddb.io/mstile-144x144.png'
-        )
-        await client.send_message(message.channel, embed=em)
+        Sites.eddb()
 
     #EDRefCard response
     if message.content.startswith('!edrefcard'):
-        em = discord.Embed(
-            title='EDRefCard',
-            url='https://edrefcard.info',
-            description='Create and optionally publish a graphical reference card for your Elite: Dangerous keyboard and controller bindings.',
-            color=0xff7700
-        )
-        em.set_image(
-            url='https://i.imgur.com/qO578Mn.jpg'
-        )
-        await client.send_message(message.channel, embed=em)
+        Sites.edRefCard()
 
     #EDSM response
     if message.content.startswith('!edsm'):
-        em = discord.Embed(
-            title='EDSM - Elite Dangerous Star Map',
-            url='https://edsm.net',
-            description='The Galactic Positioning System of Elite: Dangerous at your service.',
-            color=0xff7700
-        )
-        em.set_image(
-            url='https://www.edsm.net/img/favicons/mstile-144x144.png'
-        ) 
-        await client.send_message(message.channel, embed=em)
+        Sites.edsm()
 
     #Role help response
     if message.content.startswith('!rolehelp'):
-        em = discord.Embed(
-            title='Great Owl Role Help',
-            description="""!pc: Add yourself to the PC role
-                        !xb1: Add yourself to the Xbox 1 role
-                        !ps4: Add yourself to the PS4 role\n
-                        If you run a command while already assigned to its role, you will be asked if you wish to be removed from the role.""",
-            color=0xff7700
-        )
-        em.set_image(
-            url='https://i.imgur.com/7yG4taS.jpg'
-        )
-        await client.send_message(message.channel, embed=em)
+        HelpMenus.roleHelp():
 
     #Role Assignment PC
     if message.content.startswith('!pc'):
-        role = discord.utils.get(message.server.roles, name='PC')
-        if discord.utils.get(message.author.roles, name='PC'):
-            msg = 'You already have the PC role. Would you like to be removed from that role, CMDR?\n(y/n)'
-            await client.send_message(message.channel, msg)
-            reply = await client.wait_for_message(timeout=30, author=message.author)
-            if reply == None:
-                await client.send_message(message.channel, 'Your roles have not been modified, CMDR')
-            elif reply.content.lower() == 'y':
-                await client.remove_roles(message.author, role)
-                await client.send_message(message.channel, 'You have been removed from the PC role.')
-            elif reply.content.lower() == 'n':
-                await client.send_message(message.channel, 'Your roles have not been modified, CMDR')
-            elif reply.content != None:
-                await client.send_message(message.channel, 'Unrecognized response. Your roles have not been modified, CMDR')
-        else:
-            msg = 'Adding you to the PC role, CMDR.'
-            await client.add_roles(message.author, role)
-            await client.send_message(message.channel, msg)
+        Roles.pcRole()
 
     #Role Assignment XB1
     if message.content.startswith('!xb1'):
-        role = discord.utils.get(message.server.roles, name='XBOX 1')
-        if discord.utils.get(message.author.roles, name='XBOX 1'):
-            msg = 'You already have the Xbox 1 role. Would you like to be removed from that role, CMDR?\n(y/n)'
-            await client.send_message(message.channel, msg)
-            reply = await client.wait_for_message(timeout=30, author=message.author)
-            if reply == None:
-                await client.send_message(message.channel, 'Your roles have not been modified, CMDR')
-            elif reply.content.lower() == 'y':
-                await client.remove_roles(message.author, role)
-                await client.send_message(message.channel, 'You have been removed from the Xbox 1 role.')
-            elif reply.content.lower() == 'n':
-                await client.send_message(message.channel, 'Your roles have not been modified, CMDR')
-            elif reply.content != None:
-                await client.send_message(message.channel, 'Unrecognized response. Your roles have not been modified, CMDR')
-        else:
-            msg = 'Adding you to the Xbox 1 role, CMDR.'
-            await client.add_roles(message.author, role)
-            await client.send_message(message.channel, msg)
+        Roles.xb1Role()
 
     #Role Assignment PS4
     if message.content.startswith('!ps4'):
-        role = discord.utils.get(message.server.roles, name='PS4')
-        if discord.utils.get(message.author.roles, name='PS4'):
-            msg = 'You already have the PS4 role. Would you like to be removed from that role, CMDR?\n(y/n)'
-            await client.send_message(message.channel, msg)
-            reply = await client.wait_for_message(timeout=30, author=message.author)
-            if reply == None:
-                await client.send_message(message.channel, 'Your roles have not been modified, CMDR')
-            elif reply.content.lower() == 'y':
-                await client.remove_roles(message.author, role)
-                await client.send_message(message.channel, 'You have been removed from the PS4 role.')
-            elif reply.content.lower() == 'n':
-                await client.send_message(message.channel, 'Your roles have not been modified, CMDR')
-            elif reply.content != None:
-                await client.send_message(message.channel, 'Unrecognized response. Your roles have not been modified, CMDR')
-        else:
-            msg = 'Adding you to the PS4 role, CMDR.'
-            await client.add_roles(message.author, role)
-            await client.send_message(message.channel, msg)
+        Role.ps4Role()
 
     #Coriolis autoshortener
     if all(chunk in message.content for chunk in ('coriolis.io/outfit/', '?code=')):
-        msg = message.content
-        url = re.findall(r'(https?://\S+)', msg)[0]
-        r = requests.post(
-            'https://s.orbis.zone/api.php',
-            files = {
-                'action': (None, 'shorturl'),
-                'url': (None, url),
-                'format': (None, 'json')
-            },
-            headers = {
-                'referer': url,
-                'origin': 'https://coriolis.io'
-            }
-        )
-        response = r.json()
-        await client.send_message(message.channel, "I've edited your message, {0.author.mention}:\n{1}".format(message, msg.replace(url, response['shorturl'])))
-        await client.delete_message(message)
+        Shortener.coriolis()
 
     #Vopals response
     if message.content.startswith('!vopals'):

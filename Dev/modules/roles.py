@@ -1,6 +1,6 @@
 import discord
 
-class roles:
+class Roles:
     def pcRole(discord, client):
         role = discord.utils.get(message.server.roles, name='PC')
         if discord.utils.get(message.author.roles, name='PC'):
