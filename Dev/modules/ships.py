@@ -1,5 +1,3 @@
-import discord
-
 class ShipCard:
     def sidewinder():
         em = discord.Embed(

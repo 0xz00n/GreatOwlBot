@@ -1,5 +1,3 @@
-import discord
-
 class Sites:
     def coriolis():
         em = discord.Embed(

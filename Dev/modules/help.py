@@ -1,5 +1,3 @@
-import discord
-
 class HelpMenus:
 #    def __init__(self):
     def genHelp():

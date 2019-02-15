@@ -1,5 +1,3 @@
-import discord
-
 class Welcome:
     def response():
         joinchan = discord.utils.get(member.server.channels, name='cmdr-lounge', type=discord.ChannelType.text)

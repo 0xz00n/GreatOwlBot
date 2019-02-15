@@ -1,5 +1,3 @@
-import discord
-
 class Roles:
     def pcRole(discord, client):
         role = discord.utils.get(message.server.roles, name='PC')

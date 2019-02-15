@@ -1,5 +1,3 @@
-import discord
-
 class Shortener:
     def coriolis():
 	msg = message.content
