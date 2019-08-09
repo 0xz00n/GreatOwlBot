@@ -10,5 +10,4 @@ This bot requires the following permissions:
 
 The bot also expects a file named "token" to be placed in the same directory as the main script.  The contents of the "token" file are your discord bot's token.
 
-
-[Chrome settings](chrome://settings)
+<a href="chrome://settings">chrome</a>
